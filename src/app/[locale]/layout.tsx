@@ -6,6 +6,7 @@ import { notFound } from "next/dist/client/components/navigation";
 import { routing } from "@/src/i18n/routing";
 import LangToggle from "@/src/components/langToggle";
 import Link from "next/link";
+import Providers from "@/src/components/Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,16 +41,15 @@ export default async function LocaleLayout({ children, params }: Props) {
         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       >
         <body className="min-h-full flex flex-col">
-          <NextIntlClientProvider>
-            <LangToggle />
-            <Link href={'/'}>
-              Home
-            </Link>
-            <Link href={'/about'}>
-              About
-            </Link>
-            {children}
-          </NextIntlClientProvider>
+          <Providers>
+            <NextIntlClientProvider>
+              <LangToggle />
+              <Link href={"/"}>Home</Link>
+              <Link href={"/about"}>About</Link>
+              <Link href={"/todo"}>Todo</Link>
+              {children}
+            </NextIntlClientProvider>
+          </Providers>
         </body>
       </html>
     );
