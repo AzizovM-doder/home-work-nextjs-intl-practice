@@ -1,9 +1,9 @@
-import Async from "@/src/components/async"
+import Async2 from "@/src/components/async2"
 
 const page = () => {
   return (
     <div>
-        <Async/>
+        <Async2/>
     </div>
   )
 }

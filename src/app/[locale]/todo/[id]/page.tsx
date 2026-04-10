@@ -1,36 +1,44 @@
-// app/todo/[id]/page.tsx
+"use client";
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
+import { useGetTodo2ByIDQuery } from "@/src/api/todo2";
+import { useParams } from "next/navigation";
 
-export default async function TodoPage({ params }: PageProps) {
-  // 1. Await the params (Required in Next.js 15)
-  const { id } = await params;
-
-  // 2. Fetch data directly from your API
-  const res = await fetch(`http://37.27.29.18:8001/api/to-dos/${id}`, {
-    cache: 'no-store', // Ensures you get fresh data every time
-  });
-
-  const todo = await res.json();
-  const data = todo.data; // Adjust based on your API response structure
-
+const page = () => {
+  const { id } = useParams();
+  const { data } = useGetTodo2ByIDQuery(id);
+  console.log(data);
+  const e = data?.data;
   return (
-    <div className="p-10">
-      <h1 className="text-4xl font-bold">{data.name}</h1>
-      <p className="text-gray-600 my-4">{data.description}</p>
-      
-      <div className="grid grid-cols-2 gap-4">
-        {data.images?.map((img: any) => (
-          <img
-            key={img.id}
-            src={`http://37.27.29.18:8001/images/${img.imageName}`}
-            alt="todo"
-            className="rounded-xl w-full h-auto"
-          />
-        ))}
+    <div>
+        {/* <button
+        // onClick={() => navigate(-1)}/
+        >BACK</button> */}
+      <div
+        key={e?.id}
+        style={{ background: e?.isCompleted ? "green" : "red" }}
+        className="rounded-2xl text-white p-5 flex flex-col gap-5"
+      >
+        <h1 className="text-3xl font-bold">{e?.name}</h1>
+        <p>{e?.description}</p>
+        <div className="w-full h-50">
+          {e?.images?.map((img: any) => {
+            return (
+              <img
+                key={img?.id}
+                src={`https://to-dos-api.softclub.tj/images/${img?.imageName}`}
+                alt={img?.imageName}
+                className="rounded-2xl w-full h-full object-contain"
+              />
+            );
+          })}
+        </div>
+        <input type="checkbox" checked={e?.isCompleted} />
+        {/* <Link href={`/todo/${e.id}`}>
+          <button>INFO</button>
+        </Link> */}
       </div>
     </div>
   );
-}
+};
+
+export default page;
